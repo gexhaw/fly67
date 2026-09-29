@@ -121,7 +121,7 @@ cd sources/Drosophila_brain_model && python ../../validation/run_brian2.py 8   #
 
 ## Credits and licenses
 
-Code: MIT © Ruben Nugmanov ([@znatgost](https://github.com/znatgost)).
+Code: MIT © Ruben ([@znatgost](https://github.com/znatgost)).
 
 Data (CC-BY 4.0, please cite if you use this):
 - Dorkenwald et al. *Neuronal wiring diagram of an adult brain.* Nature 2024 — FlyWire connectome
