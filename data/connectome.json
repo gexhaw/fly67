@@ -1,0 +1,14 @@
+{
+  "format": "gzip split into parts; concatenate in order, then gunzip",
+  "bytes": 31212510,
+  "parts": [
+    {
+      "file": "connectome.bin.gz.part00",
+      "bytes": 15728640
+    },
+    {
+      "file": "connectome.bin.gz.part01",
+      "bytes": 15483870
+    }
+  ]
+}

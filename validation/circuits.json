@@ -1,0 +1,72 @@
+{
+  "baseline (no input)": {
+    "mn9": 0,
+    "gf": 0,
+    "groom": 0,
+    "walkL": 0,
+    "walkR": 0,
+    "turnL": 0,
+    "turnR": 0,
+    "back": 0
+  },
+  "sugar 100 Hz": {
+    "mn9": 52,
+    "gf": 0,
+    "groom": 0,
+    "walkL": 0,
+    "walkR": 0,
+    "turnL": 0,
+    "turnR": 0,
+    "back": 0
+  },
+  "sugar 100 + bitter 150": {
+    "mn9": 3.7,
+    "gf": 0,
+    "groom": 0,
+    "walkL": 0,
+    "walkR": 0,
+    "turnL": 0,
+    "turnR": 0,
+    "back": 0
+  },
+  "water 150 Hz": {
+    "mn9": 2.8,
+    "gf": 0,
+    "groom": 0,
+    "walkL": 0,
+    "walkR": 0,
+    "turnL": 0,
+    "turnR": 0,
+    "back": 0
+  },
+  "JO (C+E) left 150 Hz": {
+    "mn9": 0,
+    "gf": 0,
+    "groom": 14.3,
+    "walkL": 0,
+    "walkR": 0,
+    "turnL": 0,
+    "turnR": 0,
+    "back": 0
+  },
+  "looming left 80 Hz": {
+    "mn9": 0,
+    "gf": 114.8,
+    "groom": 0,
+    "walkL": 0.7,
+    "walkR": 0,
+    "turnL": 0,
+    "turnR": 25,
+    "back": 0.8
+  },
+  "looming right 80 Hz": {
+    "mn9": 0,
+    "gf": 120.3,
+    "groom": 0,
+    "walkL": 0,
+    "walkR": 0,
+    "turnL": 43,
+    "turnR": 0,
+    "back": 3.3
+  }
+}

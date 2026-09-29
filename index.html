@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FLY67 — a whole fruit fly brain in your browser</title>
+<meta name="description" content="All 138,639 neurons and 15 million connections of the FlyWire Drosophila connectome, simulated live in your browser and wired to a virtual fly.">
+<meta property="og:title" content="FLY67 — a whole fruit fly brain in your browser">
+<meta property="og:description" content="138,639 neurons · 15.1M connections · leaky integrate-and-fire · closed loop with a virtual fly">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cellipse cx='12' cy='16' rx='8' ry='5' fill='%23b8874f'/%3E%3Ccircle cx='23' cy='16' r='4' fill='%23e23d3d'/%3E%3Cellipse cx='11' cy='10' rx='7' ry='3' fill='%23a8d8ff' opacity='.6'/%3E%3Cellipse cx='11' cy='22' rx='7' ry='3' fill='%23a8d8ff' opacity='.6'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="src/style.css">
+</head>
+<body>
+<header class="top">
+  <div class="brand">
+    <svg viewBox="0 0 32 32" aria-hidden="true"><ellipse cx="12" cy="16" rx="8" ry="5" fill="#b8874f"/><circle cx="23" cy="16" r="4" fill="#e23d3d"/><ellipse cx="11" cy="10" rx="7" ry="3" fill="#a8d8ff" opacity=".55"/><ellipse cx="11" cy="22" rx="7" ry="3" fill="#a8d8ff" opacity=".55"/></svg>
+    <div>
+      <h1>FLY67</h1>
+      <p>a whole <i>Drosophila</i> brain, simulated in your tab</p>
+    </div>
+  </div>
+  <div class="stats">
+    <div class="stat"><span id="st-neurons">138,639</span><label>neurons</label></div>
+    <div class="stat"><span id="st-edges">15.1M</span><label>connections</label></div>
+    <div class="stat"><span id="st-time">0.00 s</span><label>sim time</label></div>
+    <div class="stat"><span id="st-speed">—</span><label>speed</label></div>
+    <div class="stat"><span id="st-rate">0</span><label>spikes / s</label></div>
+    <div class="stat" title="Neurons integrated step-by-step right now. All others provably cannot fire and are advanced analytically when a spike reaches them."><span id="st-active">0</span><label>hot neurons</label></div>
+  </div>
+  <div class="controls">
+    <button id="btn-play" class="icon" title="Pause / resume (space)">❚❚</button>
+    <select id="sel-speed" title="Target speed">
+      <option value="0.1">0.1×</option><option value="0.25">0.25×</option><option value="0.5">0.5×</option><option value="1" selected>1×</option>
+    </select>
+    <button id="btn-reset" title="Reset brain state">Reset</button>
+    <a class="gh" href="https://github.com/znatgost/fly67" target="_blank" rel="noopener">GitHub</a>
+  </div>
+</header>
+
+<main>
+  <section class="brain panel">
+    <canvas id="brain"></canvas>
+    <div class="legend" id="legend"></div>
+    <div class="hint">drag to rotate · shift-drag to pan · scroll to zoom · click a neuron</div>
+    <div class="inspector hidden" id="inspector"></div>
+    <div class="pop"><canvas id="pop"></canvas></div>
+  </section>
+
+  <section class="side">
+    <div class="panel arena-wrap">
+      <div class="arena-head">
+        <h2>Arena <span class="muted small">3D</span></h2>
+        <div class="cam" role="group" aria-label="Camera">
+          <button data-cam="follow" class="on" title="Camera follows the fly">Follow</button>
+          <button data-cam="overview" title="Whole arena">Overview</button>
+        </div>
+        <div class="state" id="fly-state">resting</div>
+      </div>
+      <canvas id="arena" title="click: use tool · drag: orbit · scroll: zoom"></canvas>
+      <div class="tools" id="tools">
+        <button data-tool="sugar" class="on" title="Place a sugar drop"><i class="dot sugar"></i>Sugar</button>
+        <button data-tool="bitter" title="Place a bitter drop"><i class="dot bitter"></i>Bitter</button>
+        <button data-tool="water" title="Place a water drop"><i class="dot water"></i>Water</button>
+        <button data-tool="puff" title="Air puff on the antenna (Johnston's organ)">Air puff</button>
+        <button data-tool="threat" title="Hold to bring a looming shadow toward the fly">Looming</button>
+        <button data-tool="erase" title="Remove a drop">Erase</button>
+      </div>
+      <div class="drive">
+        <label for="walk">Walking drive <span class="muted">(P9 stimulation)</span></label>
+        <input type="range" id="walk" min="0" max="90" step="5" value="45">
+        <output id="walk-val">45 Hz</output>
+      </div>
+    </div>
+
+    <div class="panel motors">
+      <h2>Motor output <span class="muted">read from descending &amp; motor neurons</span></h2>
+      <div id="motor-bars"></div>
+    </div>
+
+    <div class="panel tabs">
+      <nav>
+        <button data-tab="scen" class="on">Experiments</button>
+        <button data-tab="lab">Optogenetics lab</button>
+        <button data-tab="top">Top responders</button>
+      </nav>
+      <div class="tab on" id="tab-scen">
+        <div class="scen-grid">
+          <button data-scen="sugar"><b>Feed it sugar</b><span>sugar GRNs → … → MN9 proboscis extension</span></button>
+          <button data-scen="bitter"><b>Sugar laced with bitter</b><span>bitter GRNs suppress feeding</span></button>
+          <button data-scen="antenna"><b>Tickle an antenna</b><span>Johnston's organ → aBN1 → aDN1 grooming</span></button>
+          <button data-scen="loomL"><b>Threat from the left</b><span>LC4/LPLC2 → Giant Fiber · DNa02 · MDN</span></button>
+          <button data-scen="loomR"><b>Threat from the right</b><span>watch which side DNa02 fires on</span></button>
+          <button data-scen="noGF"><b>Silence the Giant Fiber</b><span>then threaten it again</span></button>
+          <button data-scen="six" class="wide"><b>Six seven 🤲</b><span>the meme — the fly also does it by itself every ~20 s (scripted easter egg, not neural)</span></button>
+        </div>
+        <div class="log" id="log"></div>
+      </div>
+      <div class="tab" id="tab-lab">
+        <input id="search" type="search" placeholder="Cell type or FlyWire ID — e.g. DNp01, MDN, LC4, ORN_DM1" autocomplete="off">
+        <div id="results"></div>
+        <div id="manips"></div>
+      </div>
+      <div class="tab" id="tab-top">
+        <p class="muted small">Most active neurons over the last second of simulated time (driven neurons excluded). Click to inspect.</p>
+        <table id="top"><tbody></tbody></table>
+      </div>
+    </div>
+  </section>
+</main>
+
+<div class="loading" id="loading">
+  <div class="load-card">
+    <h2>Loading the connectome</h2>
+    <p class="muted">FlyWire v783 · 138,639 neurons · 15,091,983 connections · ~31 MB</p>
+    <div class="bar"><div id="load-bar"></div></div>
+    <p id="load-msg" class="mono small">starting…</p>
+  </div>
+</div>
+
+<footer class="foot">
+  Connectome: FlyWire Consortium (Dorkenwald et al. 2024, Schlegel et al. 2024) · model: Shiu et al., <i>Nature</i> 2024 · CC-BY 4.0 data ·
+  motor mapping from descending neurons is a simplification — see <a href="https://github.com/znatgost/fly67#what-is-real-and-what-is-not" target="_blank" rel="noopener">what is real</a>.
+</footer>
+
+<script type="module" src="src/app.js"></script>
+</body>
+</html>

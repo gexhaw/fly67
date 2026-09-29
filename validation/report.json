@@ -1,0 +1,59 @@
+{
+  "trials": 30,
+  "experiments": {
+    "sugarR_150Hz": {
+      "stimHz": 150,
+      "fly67ActiveNeurons": 433,
+      "simSecondsPerWallSecond": 19.42,
+      "brian2_2.9": {
+        "activeNeurons": 413,
+        "pearsonAll": 0.9996,
+        "pearsonDownstream": 0.9997,
+        "downstreamRateRatio": 1.011,
+        "top20Overlap": 20,
+        "mn9Hz": {
+          "reference": 84.13,
+          "fly67": 83.47
+        }
+      },
+      "published": {
+        "activeNeurons": 448,
+        "pearsonAll": 0.9947,
+        "pearsonDownstream": 0.9959,
+        "downstreamRateRatio": 0.818,
+        "top20Overlap": 18,
+        "mn9Hz": {
+          "reference": 93.27,
+          "fly67": 83.47
+        }
+      }
+    },
+    "sugarR_100Hz": {
+      "stimHz": 100,
+      "fly67ActiveNeurons": 405,
+      "simSecondsPerWallSecond": 22.54,
+      "brian2_2.9": {
+        "activeNeurons": 393,
+        "pearsonAll": 0.9994,
+        "pearsonDownstream": 0.9997,
+        "downstreamRateRatio": 1,
+        "top20Overlap": 19,
+        "mn9Hz": {
+          "reference": 66,
+          "fly67": 68.57
+        }
+      },
+      "published": {
+        "activeNeurons": 404,
+        "pearsonAll": 0.9997,
+        "pearsonDownstream": 0.9998,
+        "downstreamRateRatio": 1.012,
+        "top20Overlap": 20,
+        "mn9Hz": {
+          "reference": 67.03,
+          "fly67": 68.57
+        }
+      }
+    }
+  }
+}
